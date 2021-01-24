@@ -7,3 +7,31 @@ function ibg() {
 	}
 }
 ibg();
+
+// API requests function
+const requestURL = 'https://jsonplaceholder.typicode.com/posts';
+function sendRequest(method, url) {
+	return fetch(url).then(response => {
+		if (response.ok) {
+			return response.json();
+		}
+
+		throw Error(response.statusText);
+	})
+}
+
+// Get 6 posts when clicked on button "SHOW MORE"
+const parent = document.querySelector(".blog-page__cards");
+document.querySelector(".blog-page__btn").addEventListener("click", (e) => {
+	sendRequest('GET', requestURL)
+		.then((result) => {
+			for (let i = 0; i < 6; i++) {
+				parent.innerHTML += '<article class="blog-page__card card-blog"><div class="card-blog__body"><h2 class="card-blog__title"><a href="#" class="card-blog__title-link">' + result[i].title + '</a></h2><div class="card-blog__text"><p>' + result[i].body + '<span>...</span></p></div><a href="#" class="card-blog__more"><span>Read More</span></a></div></article>'
+			}
+		})
+		.catch(err => console.error('Что-то пошло не так...', err))
+	e.preventDefault();
+});
+
+
+
